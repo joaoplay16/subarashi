@@ -1,0 +1,19 @@
+
+{{#each animes}}
+<div class="card">
+	<div class="card-body">
+		<h3>Nome: {{nome}}</h3>
+		<p>Categoria: {{categoria.nome}}</p>
+		<p>Descricao: {{descricao}}</p>
+		<p>Views: {{views}}</p>
+		<p>Data: {{data_postagem}}</p>
+		<a href="/admin/episodios/add/{{_id}}"><button class="btn btn-warning">+</button></a>
+		{{!-- {{#each episodios}} --}}
+			<p>Episodios: {{episodios.length}}</p>
+		{{!-- {{/each}} --}}
+
+    <a href="/admin/anime/editar/{{_id}}"><button class="btn btn-success">Editar</button></a>
+    <a href="/admin/animes/remover/{{_id}}"><button class="btn btn-danger">Remover</button></a>
+	</div>
+</div>
+{{/each}}

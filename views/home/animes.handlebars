@@ -1,0 +1,15 @@
+
+{{#each animes}}
+<div class="card">
+	<div class="card-body">
+		<h3>Nomes: {{nome}}</h3>
+		<p>Categoria: {{categoria.nome}}</p>
+		<p>Descricao: {{descricao}}</p>
+		<p>Views: {{views}}</p>
+		<p>Data: {{data_postagem}}</p>
+		{{!-- {{#each episodios}} --}}
+			<p>Episodios: {{episodios.length}}</p>
+		{{!-- {{/each}} --}}
+	</div>
+</div>
+{{/each}}

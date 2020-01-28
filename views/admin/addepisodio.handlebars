@@ -1,0 +1,62 @@
+<div class="container-fluid">
+    
+    <div>
+        <h3>{{anime.nome}}</h3>
+    </div>
+    <div>
+        <h5>Adicionar episodio</h5>
+    </div>
+
+    <div class="row align-items-start">
+        <div class="col-md-8 col-sm-8">
+           
+             <form action="/admin/episodios/salvar" method="POST">
+  
+            
+                <input type="hidden" name="id" value="{{anime._id}}" />
+                <input type="hidden" name="epId" value="{{episodio._id}}" />
+                <div class="">
+                    <label for="numero">Numero</label>
+                    <input value="{{episodio.numero}}" type="number" name="numero" class="form-control">
+                </div>
+                <div class="">
+                    <label for="url">URL</label>
+                    <input value="{{episodio.url}}" type="text" name="url" class="form-control">
+                </div>
+                <div class="">
+                    <label for="views">Views</label>
+                    <input value="{{episodio.views}}" type="number" name="views" class="form-control">
+                </div>
+                <div class="">
+                    <label for="views">Minutos</label>
+                    <input value="{{episodio.minutos}}" type="number" name="minutos" class="form-control">
+                </div>
+                <div class="mt-2">
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-2 col-sm-2">
+                    
+            {{#with anime}}
+                {{#each episodios}}
+                    <form action="/admin/episodio/editar" method="POST">
+                        <input type="hidden" name="animeId" value="{{../_id}}">
+                        <button type="submit" class="mt-2 btn btn-link"> Episodio: {{numero}}</button>
+                        <a href="/admin/episodios/del/{{../_id}}/{{_id}}">
+                            <div class="mt-2 btn btn-danger">-</div>
+                        </a>
+
+                        <input type="hidden" name="epId" value="{{_id}}" />
+                        <input type="hidden" name="numero" value="{{numero}}" />
+                        <input type="hidden" name="url" value="{{url}}" />
+                        <input type="hidden" name="views" value="{{views}}" />
+                        <input type="hidden" name="minutos" value="{{minutos}}" />
+                    </form>
+            {{/each}}
+            {{/with}}
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,45 @@
+<div class="container">
+	{{#if anime}}
+		<form action="/admin/anime/editar" method="POST">
+	{{else}}
+		<form action="/admin/anime/salvar" method="POST">
+	{{/if}}
+	<input type="hidden" name="id" value="{{anime._id}}">
+	<div class="col-md-4">
+		<label for="nome">Nome: </label>
+		<input type="text" class="form-control" name="nome" value="{{anime.nome}}" placeholder="Nome" />
+	</div>
+	<div class="col-md-4">
+		<label for="descricao">Descricao: </label>
+		<input type="text" class="form-control" name="descricao" value="{{anime.descricao}}" placeholder="descricao" />
+	</div>
+	<div class="col-md-4">
+		<label for="categoria">Categoria: </label>
+		<select name="categoria" class="custom-select">
+			{{#each categorias}}
+				<option value="{{_id}}">{{nome}}</option>
+			{{/each}}
+		</select>
+	</div>
+
+	<div class="col-md-4">
+		<label for="status">Status: </label>
+		<select name="status" class="custom-select">
+			<option value="andamento">Em andamento</option>
+			<option value="completo">Completo</option>
+		</select>
+	</div>
+	<div class="col-md-4">
+		<label for="view">Views</label>
+		<input type="text" class="form-control" value="{{anime.views}}" name="views" />
+	</div>
+
+	<div class="col-md-4 mt-3">
+		{{#if anime}}
+		<button type="submit" class="btn btn-success">Editar</button>
+	{{else}}
+		<button type="submit" class="btn btn-info">Salvar</button>
+	{{/if}}
+	</div>
+	</form>
+</div>

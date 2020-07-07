@@ -2,10 +2,8 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 require('../models/Anime')
-require('../models/Episodio')
 require('../models/Categoria')
 const Anime = mongoose.model('animes')
-const Episodio = mongoose.model('episodios')
 const Categoria = mongoose.model('categorias')
 
 
@@ -88,8 +86,6 @@ router.post('/categorias/delete', (req, res) => {
 
 })
 
-
-
 router.get('/animes', (req, res) => {
 	Anime.find().populate('categoria').then((animes) => {
 		res.render('admin/animes', { animes: animes })
@@ -100,7 +96,8 @@ router.get('/animes', (req, res) => {
 
 router.get('/anime/add', (req, res) => {
 	Categoria.find().then((categorias) => {
-		res.render('admin/addanime', { categorias })
+		res.render('admin/addanime', {categorias: categorias})
+		console.log(categorias)
 	}).catch(err => {
 		console.log(err)
 	})
@@ -125,7 +122,7 @@ router.post('/anime/salvar', (req, res) => {
 })
 
 router.get('/anime/editar/:id', (req, res) => {
-	Anime.findOne({ _id: req.params.id }).then((anime) => {
+	Anime.findOne({ _id: req.params.id }).populate('categoria').then((anime) => {
 		Categoria.find().then((categorias) => {
 
 			res.render('admin/addanime', { anime, categorias })
@@ -141,12 +138,18 @@ router.get('/anime/editar/:id', (req, res) => {
 
 router.post('/anime/editar', (req, res) => {
 	Anime.findById(req.body.id).then((anime) => {
-		console.log(anime)
-		anime.nome = req.body.nome,
-			anime.descricao = req.body.descricao,
-			anime.categoria = req.body.categoria,
-			anime.status = req.body.status,
-			anime.views = req.body.views
+		anime.nome = req.body.nome
+		anime.capa = req.body.capa
+		anime.descricao = req.body.descricao
+		anime.categoria = req.body.categoria
+		anime.status = req.body.status
+		anime.views = req.body.views
+
+		anime.episodios.sort((a, b)=>{
+			return a.numero - b.numero;
+		})
+
+		console.log(anime.data_postagem.toLocaleDateString())
 
 		anime.save().then(() => {
 			req.flash('success_msg', 'Anime atualizado com sucesso')
@@ -171,15 +174,16 @@ router.get('/animes/remover/:id', (req, res) => {
 	})
 })
 
-
-
-
 router.get('/episodios', (req, res) => {
 
 })
 
 router.get('/episodios/add/:id', (req, res) => {
 	Anime.findOne({ _id: req.params.id }).then((anime) => {
+		anime.episodios.sort((a, b)=>{
+			return a.numero - b.numero;
+		})
+
 		res.render('admin/addepisodio', { anime })
 	}).catch(err => {
 		req.flash('error_msg', 'Erro ao adicionar episódio' + err)
@@ -189,14 +193,14 @@ router.get('/episodios/add/:id', (req, res) => {
 
 router.post('/episodios/salvar', (req, res) => {
 	Anime.findById(req.body.id).then((anime) => {
-		
-		if(req.body.epId){
+
+		if (req.body.epId) {
 			const episodio = anime.episodios.id(req.body.epId)
 			episodio['url'] = req.body.url
 			episodio['numero'] = req.body.numero
 			episodio['minutos'] = req.body.minutos
 			episodio['views'] = req.body.views
-		}else{
+		} else {
 			const eps = {
 				url: req.body.url,
 				numero: req.body.numero,
@@ -205,10 +209,13 @@ router.post('/episodios/salvar', (req, res) => {
 			}
 			anime.episodios.push(eps)
 		}
-		
+		anime.episodios.sort((a, b)=>{
+			return a.numero - b.numero;
+		})
+
 		anime.save().then(() => {
 			console.log('Ep adicionado!')
-			res.redirect('back')
+			res.render('admin/addepisodio', { anime })
 		}).catch(err => {
 			req.flash('error_message', 'Erro ao adicionar episódio ' + err)
 			res.redirect('/admin/animes')
@@ -221,11 +228,11 @@ router.post('/episodios/salvar', (req, res) => {
 
 
 router.post('/episodio/editar', (req, res) => {
-	Anime.findById(req.body.animeId).then((anime)=>{
+	Anime.findById(req.body.animeId).then((anime) => {
 		const episodio = anime.episodios.id(req.body.epId)
-		
-		res.render('admin/addepisodio', {anime, episodio})
-	}).catch(err =>{
+
+		res.render('admin/addepisodio', { anime, episodio })
+	}).catch(err => {
 		console.log(err)
 		req.flash('error_msg', 'Erro interno' + err)
 		res.redirect('/admin/animes')
@@ -234,17 +241,17 @@ router.post('/episodio/editar', (req, res) => {
 
 router.get('/episodios/del/:animeid/:epid', (req, res) => {
 	console.log(req.params)
-	Anime.findById(req.params.animeid).then((anime)=>{
+	Anime.findById(req.params.animeid).then((anime) => {
 		anime.episodios.id(req.params.epid).remove()
-		
+
 		anime.save().then(() => {
 			console.log('Ep excluido!')
 			res.redirect('back')
 		}).catch(err => {
-			req.flash('error_message', 'Erro ao adicionar episódio ' + err)
+			req.flash('error_message', 'Erro ao remover episódio ' + err)
 			res.redirect('/admin/animes')
 		})
-	}).catch(err =>{
+	}).catch(err => {
 		console.log(err)
 		req.flash('error_msg', 'Erro interno' + err)
 		res.redirect('/admin/animes')

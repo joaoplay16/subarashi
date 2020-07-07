@@ -1,6 +1,4 @@
-
-{{#each animes}}
-<div class="card">
+<!-- <div class="card">
 	<div class="card-body">
 		<h3>Nomes: {{nome}}</h3>
 		<p>Categoria: {{categoria.nome}}</p>
@@ -11,5 +9,21 @@
 			<p>Episodios: {{episodios.length}}</p>
 		{{!-- {{/each}} --}}
 	</div>
+</div> -->
+<div class="row">
+	{{#each animes}}
+	<div class="card-deck col-md-3 col-sm-4 mb-3">
+		<div class="card text-white bg-dark shadow rounded">
+			<a href="/assistir/{{_id}}"><img class="card-img-top" src="{{capa}}" style="height: 180px;" alt="Imagem de capa do anime" /></a>
+			<div class="card-body">
+				<h5 class="card-title"><a class="text-light" href="/assistir/{{_id}}">{{nome}}</a></h5>
+				<p class="card-text text-truncate" style="display: block;">{{descricao}}</p>
+			</div>
+			<div class="card-footer text-secondary d-flex justify-content-between">
+				<div class="text-left"><small>1 hora atrás</small></div>
+				<div class="text-right"><small>{{views}} views</small></div>
+			</div>
+		</div>
+	</div>
+	{{/each}}
 </div>
-{{/each}}

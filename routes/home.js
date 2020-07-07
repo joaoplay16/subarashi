@@ -10,8 +10,19 @@ const Anime = mongoose.model('animes')
 
 router.get('/animes', (req, res)=>{
 	Anime.find().populate('categoria').then((animes)=>{
-		res.render('home/animes', {animes: animes})
+		res.render('home/animes', {animes})
 	}).catch(err=>{
+		console.log(err)
+	})
+})
+
+router.get('/assistir/:id', (req, res)=>{
+	Anime.findById(req.params.id).populate('categoria').then((anime)=>{
+		anime.episodios.sort((a, b)=>{
+			return a.numero - b.numero;
+		})
+		res.render('home/detalheanime', {anime})
+	}).catch(err =>{
 		console.log(err)
 	})
 })

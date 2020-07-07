@@ -1,0 +1,12 @@
+
+<h1>Usuarios</h1>
+{{#each usuarios}}
+<div class="card col-md-6 mt-2">
+	<div class="card-body">
+		<a href="/usuarios/edit/{{id}}"><h4>{{nome}}</h4></a>
+		<h4>{{email}}</h3>
+		<h4>Admin? {{eAdmin}}</h3>
+		<h4>senha {{senha}}</h3>
+	</div>
+</div>
+{{/each}}

@@ -1,19 +1,31 @@
+<div class="row">
+	{{#each animes}}
+	<div class="card-deck col-md-3 ">
+		<div class="card bg-dark text-white shadow ">
+			<div class="card-header text-center">
+				<div class="card-text">
+					<a class="text-light" href="/admin/anime/editar/{{_id}}">
+						<h5>{{nome}}</h5>
+					</a>
+				</div> 
+				</div> 
+				<a href="/assistir/{{_id}}"><img class="card-img-top" src="{{capa}}" style="height: 180px;" alt="Imagem de capa do anime" /></a>
+				<div class="card-body">
+					<div>Categoria: {{categoria.nome}}</div>
+					<div class="text-truncate">Descricao: {{descricao}}</div>
+					<div><small class="card-text">Views: {{views}}</small></div>
+					<div><small class="card-text">Data: {{#datef data_postagem}}{{/datef}}</small></div>
+					{{!-- {{#each episodios}} --}}
+					<a class="text-warning" href="/admin/episodios/add/{{_id}}"><p>Episodios: {{episodios.length}}</p></a>
+					{{!-- {{/each}} --}}
 
-{{#each animes}}
-<div class="card">
-	<div class="card-body">
-		<h3>Nome: {{nome}}</h3>
-		<p>Categoria: {{categoria.nome}}</p>
-		<p>Descricao: {{descricao}}</p>
-		<p>Views: {{views}}</p>
-		<p>Data: {{data_postagem}}</p>
-		<a href="/admin/episodios/add/{{_id}}"><button class="btn btn-warning">+</button></a>
-		{{!-- {{#each episodios}} --}}
-			<p>Episodios: {{episodios.length}}</p>
-		{{!-- {{/each}} --}}
+					<div class="d-flex justify-content-between">
+						<a href="/admin/anime/editar/{{_id}}"><button class="btn btn-success">Editar</button></a>
+						<a href="/admin/animes/remover/{{_id}}"><button class="btn btn-danger">Remover</button></a>
+					</div>	
+				</div>
+			</div>
 
-    <a href="/admin/anime/editar/{{_id}}"><button class="btn btn-success">Editar</button></a>
-    <a href="/admin/animes/remover/{{_id}}"><button class="btn btn-danger">Remover</button></a>
-	</div>
+		</div>
+	{{/each}}
 </div>
-{{/each}}

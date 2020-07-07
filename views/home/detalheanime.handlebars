@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="row mb-5">
+        <div class="media align-self-start mr-3">
+            <img src="{{anime.capa}}" alt="" style="height: 280px;" />
+        </div>
+        <div class="media-body">
+            <h5>{{anime.nome}}</h5>
+            <p>Episodios: {{anime.episodios.length}}</p>
+            <p>Categoria: {{anime.categoria.nome}}</p>
+            <p>Views: {{anime.views}}</p>
+            <p>Postagdo em: {{anime.data_postagem}}</p>
+
+            <p>{{anime.descricao}}</p>
+        </div>
+    </div>
+    <div class="row">
+        {{#each anime.episodios}}
+        <div class="card-deck col-md-3 col-sm-4 mb-3">
+            <div class="card text-white bg-dark shadow rounded">
+                <a href="/videos/{{_id}}"><img class="card-img-top" src="{{../anime.capa}}" style="height: 180px;" alt="Imagem de capa do anime" /></a>
+                <div class="card-body">
+                    <h5 class="card-title"><a class="text-light" href="/assistir/{{_id}}">Episódio {{numero}}</a></h5>
+                </div>
+                <div class="card-footer text-secondary d-flex justify-content-between">
+                    <div class="text-left"><small>1 hora atrás</small></div>
+                    <div class="text-right"><small>{{views}} views</small></div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>

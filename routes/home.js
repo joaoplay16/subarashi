@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
+require('../models/Categoria')
+const Categoria = mongoose.model('categorias')
 require('../models/Anime')
 //require('../models/Episodio')
 const Anime = mongoose.model('animes')
@@ -15,6 +17,41 @@ router.get('/animes', (req, res)=>{
 		console.log(err)
 	})
 })
+
+router.get('/categorias', (req, res) => {
+	Categoria.find().sort({ date: 'desc' }).then((categorias) => {
+		res.render('home/categorias', { categorias: categorias })
+	}).catch(err => {
+		req.flash('error_msg', 'Houve um erro listar categorias')
+		res.redirect('/')
+	})
+})
+
+router.get('/categorias/:slug', (req, res)=>{
+		Categoria.findOne({slug: req.params.slug}).then((categoria)=>{
+
+			if(categoria){
+
+				Anime.find({categoria: categoria._id}).populate('categoria').then((animes)=>{
+					console.log(animes)
+					
+					res.render('home/animes', {animes, categoria})
+				}).catch(err => {
+					req.flash('error_msg', 'Erro ao listar animes ' + err )
+					res.redirect('/')
+					
+				})
+			}else{
+				req.flash('error_msg', 'Categoria nao existe')
+				res.redirect('/')
+			}
+
+			
+		}).catch(err=>{
+			req.flash('error_msg', 'Erro interno')
+			res.redirect('/')
+		})
+	})
 
 router.get('/assistir/:id', (req, res)=>{
 	Anime.findById(req.params.id).populate('categoria').then((anime)=>{
